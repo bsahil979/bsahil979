@@ -11,7 +11,7 @@
 
 <!-- NAME / TAGLINE - animated typing -->
 <a href="https://sahilbelchada.dev">
-  <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=600&size=24&duration=2600&pause=900&color=AA9BEF&center=true&vCenter=true&width=880&lines=Sahil+Belchada+-+Software+Engineer+%26+Systems+Builder;Event-Driven+Pipelines+%7C+AI+Agents+%7C+Distributed+Backends;FastAPI+%7C+Spring+Boot+%7C+Kafka+%7C+PyTorch+%7C+AWS;Explore+live+at+sahilbelchada.dev" alt="typing banner">
+  <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=600&size=24&duration=2600&pause=900&color=AA9BEF&center=true&vCenter=true&width=880&lines=Sahil+Belchada+-+Software+Engineer+%26+Systems+Builder;Event-Driven+Pipelines+%7C+AI+Agents+%7C+Distributed+Backends;FastAPI+%7C+Spring+Boot+%7C+Kafka+%7C+PyTorch+%7C+AWS;Explore+live+at+sahilbelchada.dev" width="100%" alt="typing banner">
 </a>
 
 <br>
@@ -48,7 +48,7 @@ I specialize in architecting high-throughput data streaming pipelines, low-laten
 
 ## my perfect stack
 
-<img src="https://skillicons.dev/icons?i=python,java,ts,js,cpp,fastapi,spring,postgres,redis,mongodb,kafka,docker,aws,git,github,vscode,linux,tailwind,react,nextjs&perline=10" alt="tech stack">
+<img src="https://skillicons.dev/icons?i=python,java,ts,js,cpp,fastapi,spring,postgres,redis,mongodb,kafka,docker,aws,git,github,vscode,linux,tailwind,react,nextjs&perline=7" alt="tech stack">
 
 </div>
 
