@@ -1,0 +1,19 @@
+{
+  "projects": [
+    {
+      "repo": "MarketMindAI",
+      "description": "Real-time financial intelligence platform orchestrating multi-agent LLM analysis, Kafka event streams, and vector search.",
+      "language": "Python"
+    },
+    {
+      "repo": "MOM",
+      "description": "AI-driven meeting recorder & automated Minutes of Meeting (MOM) generator with smart action item extraction.",
+      "language": "Python"
+    },
+    {
+      "repo": "My_Portfolio",
+      "description": "Cinematic software engineering portfolio featuring Three.js 3D depth, Motion physics, and technical telemetry.",
+      "language": "JavaScript"
+    }
+  ]
+}

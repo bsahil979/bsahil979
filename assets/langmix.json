@@ -1,0 +1,12 @@
+{
+  "title": "Language Mix",
+  "_comment": "Primary programming languages proficiency (0-100)",
+  "axes": [
+    { "label": "Python", "value": 95 },
+    { "label": "Java", "value": 88 },
+    { "label": "TypeScript", "value": 86 },
+    { "label": "C++", "value": 82 },
+    { "label": "SQL", "value": 90 },
+    { "label": "Shell / Bash", "value": 80 }
+  ]
+}

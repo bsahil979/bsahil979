@@ -1,0 +1,13 @@
+{
+  "title": "Skill Radar",
+  "_comment": "Self-rated engineering competencies (0-100)",
+  "axes": [
+    { "label": "Distributed Systems", "value": 90 },
+    { "label": "Backend Architecture", "value": 94 },
+    { "label": "AI & Agentic Systems", "value": 88 },
+    { "label": "Data Streaming / Kafka", "value": 86 },
+    { "label": "Cloud & DevOps (AWS)", "value": 82 },
+    { "label": "Database & Vector Search", "value": 89 },
+    { "label": "Interactive & 3D / WebGL", "value": 80 }
+  ]
+}
