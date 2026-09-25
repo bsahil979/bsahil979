@@ -1,11 +1,13 @@
 <div align="center">
 
-<!-- BANNER - terminal profile.sh --live -->
-<picture>
-  <source media="(prefers-color-scheme: dark)"  srcset="assets/banner-dark.svg?v=2">
-  <source media="(prefers-color-scheme: light)" srcset="assets/banner-light.svg?v=2">
-  <img src="assets/banner-dark.svg?v=2" width="100%" alt="profile.sh --live">
-</picture>
+<!-- BANNER - terminal profile.sh --live (Click to launch live 60 FPS interactive scanner) -->
+<a href="https://sahilbelchada.dev/visual-map.html" title="Click to launch live 60 FPS Biometric Visual Map Scanner">
+  <picture>
+    <source media="(prefers-color-scheme: dark)"  srcset="assets/banner-dark.svg?v=2">
+    <source media="(prefers-color-scheme: light)" srcset="assets/banner-light.svg?v=2">
+    <img src="assets/banner-dark.svg?v=2" width="100%" alt="profile.sh --live">
+  </picture>
+</a>
 
 <br>
 
@@ -16,7 +18,8 @@
 
 <br>
 
-<!-- SOCIALS -->
+<!-- SOCIALS & LIVE SCANNER -->
+<a href="https://sahilbelchada.dev/visual-map.html"><img src="https://img.shields.io/badge/VISUAL.MAP-LIVE_60FPS_CANVAS-22D3EE?style=for-the-badge&logo=visualstudiocode&logoColor=black" alt="Live 60 FPS Biometric Visual Map Scanner"></a>&nbsp;&nbsp;
 <a href="https://www.linkedin.com/in/sahil-belchada/"><img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn"></a>&nbsp;&nbsp;
 <a href="https://sahilbelchada.dev"><img src="https://img.shields.io/badge/Portfolio-0d1117?style=for-the-badge&logo=googlechrome&logoColor=aa9bef" alt="Portfolio"></a>&nbsp;&nbsp;
 <a href="mailto:bsahil979@gmail.com"><img src="https://img.shields.io/badge/Email-0d1117?style=for-the-badge&logo=gmail&logoColor=aa9bef" alt="Email"></a>&nbsp;&nbsp;
@@ -38,7 +41,7 @@ I specialize in architecting high-throughput data streaming pipelines, low-laten
 - 🚀 **MarketMind AI**: Engineered an end-to-end real-time financial intelligence platform orchestrating multi-agent LLM analysis, Kafka event streaming, and pgvector semantic retrieval.
 - ⚡ **Backend & Scalability**: Designing resilient microservices with **FastAPI**, **Spring Boot**, **PostgreSQL**, and sub-millisecond **Redis** caching layers.
 - 🤖 **Applied AI & Agentic Workflows**: Passionate about autonomous agent architectures, LangChain, RAG orchestration, and fine-tuning models for domain-specific automation.
-- 🌐 **Interactive Engineering**: Pairing low-level systems precision with cinematic web experiences ([sahilbelchada.dev](https://sahilbelchada.dev)) powered by Three.js and custom Motion physics.
+- 🌐 **Interactive Engineering**: Pairing low-level systems precision with cinematic web experiences ([sahilbelchada.dev](https://sahilbelchada.dev)) and live biometric identity telemetry ([VISUAL.MAP Live Canvas](https://sahilbelchada.dev/visual-map.html)) powered by real-time particle physics.
 - 🌱 **My mission**: Engineering software that remains deterministic, fault-tolerant, and performant at scale while creating intuitive, accessible technology.
 - 💬 Let's connect on **distributed systems, real-time event streams, or AI agent architectures**!
 

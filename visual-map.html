@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VISUAL_MAP • Sahil Belchada — Biometric Identity Scanner</title>
+  <meta name="description" content="Genuinely dynamic, live 60 FPS HTML5 canvas particle scanner representing Sahil Belchada's developer identity and systems telemetry.">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+
+  <!-- Google Fonts: Space Grotesk, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <style>
+    :root {
+      --bg: #0A101F;
+      --panel: #0D1628;
+      --panel2: #101B30;
+      --line: #25344C;
+      --muted: #8291A8;
+      --text: #DDE7F5;
+      --portrait: #AA9BEF;
+      --chrome: #22D3EE;
+      --accent: #10B981;
+      --alert: #FF4D5A;
+      --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Consolas, monospace;
+      --font-sans: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-mono);
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(16px, 3vw, 40px);
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(ellipse at 50% 10%, rgba(34, 211, 238, 0.08) 0%, transparent 60%),
+        radial-gradient(circle at 85% 85%, rgba(170, 155, 239, 0.05) 0%, transparent 50%);
+    }
+
+    /* Top Navigation Bar */
+    .top-bar {
+      width: min(1180px, 100%);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding: 0 4px;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 500;
+      padding: 8px 16px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(13, 22, 40, 0.6);
+      backdrop-filter: blur(10px);
+      transition: all 0.25s ease;
+    }
+
+    .back-link:hover {
+      color: var(--chrome);
+      border-color: var(--chrome);
+      transform: translateX(-3px);
+    }
+
+    .engine-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.78rem;
+      letter-spacing: 0.05em;
+      color: var(--accent);
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 6px 14px;
+      border-radius: 999px;
+    }
+
+    .pulse-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 8px var(--accent);
+      animation: pulse 1.6s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.35; transform: scale(0.8); }
+    }
+
+    /* Outer Cybernetic Terminal Shell */
+    .terminal-window {
+      width: min(1180px, 100%);
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      box-shadow: 0 25px 60px rgba(2, 5, 11, 0.6), 0 0 0 1px rgba(37, 52, 76, 0.5);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Terminal Title Bar */
+    .terminal-titlebar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(16, 27, 48, 0.5);
+    }
+
+    .traffic-lights {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .light {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .light.red { background: #FF5F56; }
+    .light.yellow { background: #FFBD2E; }
+    .light.green { background: #27C93F; }
+
+    .terminal-title {
+      font-size: 0.85rem;
+      color: var(--muted);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+
+    .terminal-meta {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    /* Main Dual-Panel Content */
+    .terminal-body {
+      display: grid;
+      grid-template-columns: 460px 1fr;
+      padding: 24px;
+      gap: 24px;
+    }
+
+    /* Left Panel: Live Canvas Scanner */
+    .visual-map-card {
+      background: var(--panel2);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    #visualMapCanvas {
+      width: 100%;
+      height: 550px;
+      display: block;
+      cursor: crosshair;
+    }
+
+    /* Right Panel: SYSTEM.INFO Telemetry */
+    .system-info-card {
+      background: var(--panel2);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 24px 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .info-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 16px;
+      margin-bottom: 20px;
+    }
+
+    .info-title {
+      color: var(--chrome);
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+    }
+
+    .info-badges {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--alert);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+    }
+
+    .live-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--alert);
+      box-shadow: 0 0 8px var(--alert);
+      animation: pulse 1.4s infinite ease-in-out;
+    }
+
+    .user-pill {
+      font-size: 0.84rem;
+      color: var(--chrome);
+      font-weight: 700;
+      background: rgba(34, 211, 238, 0.12);
+      border: 1px solid rgba(34, 211, 238, 0.35);
+      padding: 4px 12px;
+      border-radius: 999px;
+    }
+
+    /* Dotted Telemetry Table */
+    .telemetry-rows {
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+    }
+
+    .telemetry-row {
+      display: flex;
+      align-items: baseline;
+      font-size: 0.86rem;
+      line-height: 1.4;
+    }
+
+    .telemetry-label {
+      color: var(--muted);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .telemetry-leader {
+      flex: 1;
+      border-bottom: 1px dotted var(--line);
+      margin: 0 10px;
+      height: 1px;
+      align-self: center;
+    }
+
+    .telemetry-value {
+      color: var(--text);
+      font-weight: 600;
+      white-space: nowrap;
+      flex-shrink: 0;
+      text-align: right;
+    }
+
+    .telemetry-value a {
+      color: var(--chrome);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .telemetry-value a:hover {
+      color: #FFFFFF;
+      text-decoration: underline;
+    }
+
+    /* System Status Footer */
+    .info-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top: 1px solid var(--line);
+      padding-top: 16px;
+      margin-top: 24px;
+      font-size: 0.76rem;
+    }
+
+    .status-ok {
+      color: var(--accent);
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+
+    .node-loc {
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+
+    /* Responsive Breakpoints */
+    @media (max-width: 980px) {
+      .terminal-body {
+        grid-template-columns: 1fr;
+      }
+
+      #visualMapCanvas {
+        height: 520px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 12px;
+      }
+
+      .top-bar {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+      }
+
+      .terminal-body {
+        padding: 14px;
+        gap: 16px;
+      }
+
+      #visualMapCanvas {
+        height: 460px;
+      }
+
+      .telemetry-row {
+        font-size: 0.78rem;
+      }
+
+      .telemetry-value {
+        font-size: 0.78rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Controls -->
+  <header class="top-bar">
+    <a href="index.html" class="back-link">
+      <i class="fa-solid fa-arrow-left"></i> sahilbelchada.dev
+    </a>
+    <div class="engine-status-badge">
+      <span class="pulse-dot"></span>
+      <span>60 FPS BIOMETRIC PARTICLE ENGINE</span>
+    </div>
+  </header>
+
+  <!-- Interactive Terminal Window -->
+  <main class="terminal-window">
+    <div class="terminal-titlebar">
+      <div class="traffic-lights">
+        <span class="light red"></span>
+        <span class="light yellow"></span>
+        <span class="light green"></span>
+      </div>
+      <div class="terminal-title">sahil@systems:~$ visual_map --interactive --live</div>
+      <div class="terminal-meta">SYS: OK · 60 FPS</div>
+    </div>
+
+    <div class="terminal-body">
+      <!-- Left: Interactive Canvas Scanner -->
+      <section class="visual-map-card" aria-label="Visual Map Identity Scanner">
+        <canvas id="visualMapCanvas" width="420" height="570"></canvas>
+      </section>
+
+      <!-- Right: System Info Telemetry -->
+      <aside class="system-info-card" aria-label="System Information Telemetry">
+        <div>
+          <div class="info-header">
+            <span class="info-title">SYSTEM.INFO</span>
+            <div class="info-badges">
+              <span class="live-badge"><span class="live-dot"></span> LIVE</span>
+              <span class="user-pill">@bsahil979</span>
+            </div>
+          </div>
+
+          <div class="telemetry-rows">
+            <div class="telemetry-row">
+              <span class="telemetry-label">Subject</span>
+              <span class="telemetry-leader"></span>
+              <span class="telemetry-value">Sahil Belchada</span>
+            </div>
+            <div class="telemetry-row">
+              <span class="telemetry-label">Role</span>
+              <span class="telemetry-leader"></span>
+              <span class="telemetry-value">Software Engineer · Systems & AI</span>
+            </div>
+            <div class="telemetry-row">
+              <span class="telemetry-label">Origin</span>
+              <span class="telemetry-leader"></span>
+              <span class="telemetry-value">Mumbai, India</span>
+            </div>
+            <div class="telemetry-row">
+              <span class="telemetry-label">Education</span>
+              <span class="telemetry-leader"></span>
+              <span class="telemetry-value">B.Tech Computer Engineering (2027)</span>
+            </div>
+            <div class="telemetry-row">
+              <span class="telemetry-label">Status</span>
+              <span class="telemetry-leader"></span>
+              <span class="telemetry-value">Building High-Throughput & Agentic Systems</span>
+            </div>
+            <div class="telemetry-row">
+              <span class="telemetry-label">Portfolio</span>
+              <span class="telemetry-leader"></span>
+              <span class="telemetry-value"><a href="https://sahilbelchada.dev">sahilbelchada.dev</a></span>
+            </div>
+            <div class="telemetry-row">
+              <span class="telemetry-label">Core.Languages</span>
+              <span class="telemetry-leader"></span>
+              <span class="telemetry-value">Python · Java · TypeScript · C++ · SQL</span>
+            </div>
+            <div class="telemetry-row">
+              <span class="telemetry-label">Core.Backend</span>
+              <span class="telemetry-leader"></span>
+              <span class="telemetry-value">FastAPI · Spring Boot · Node.js</span>
+            </div>
+            <div class="telemetry-row">
+              <span class="telemetry-label">Core.Streaming</span>
+              <span class="telemetry-leader"></span>
+              <span class="telemetry-value">Apache Kafka · Redis Streams · WebSockets</span>
+            </div>
+            <div class="telemetry-row">
+              <span class="telemetry-label">Core.AI / Agents</span>
+              <span class="telemetry-leader"></span>
+              <span class="telemetry-value">PyTorch · LangChain · RAG · pgvector</span>
+            </div>
+            <div class="telemetry-row">
+              <span class="telemetry-label">Core.Databases</span>
+              <span class="telemetry-leader"></span>
+              <span class="telemetry-value">PostgreSQL · MongoDB · Redis · Pinecone</span>
+            </div>
+            <div class="telemetry-row">
+              <span class="telemetry-label">Core.Cloud & Ops</span>
+              <span class="telemetry-leader"></span>
+              <span class="telemetry-value">AWS (EC2, S3) · Docker · CI/CD</span>
+            </div>
+            <div class="telemetry-row">
+              <span class="telemetry-label">Grid.LinkedIn</span>
+              <span class="telemetry-leader"></span>
+              <span class="telemetry-value"><a href="https://linkedin.com/in/sahil-belchada" target="_blank" rel="noopener">in/sahil-belchada</a></span>
+            </div>
+            <div class="telemetry-row">
+              <span class="telemetry-label">Grid.GitHub</span>
+              <span class="telemetry-leader"></span>
+              <span class="telemetry-value"><a href="https://github.com/bsahil979" target="_blank" rel="noopener">bsahil979</a></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-footer">
+          <span class="status-ok">● ALL SYSTEMS NOMINAL</span>
+          <span class="node-loc">UTC+5:30 · MUMBAI NODE</span>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- Pre-computed Particle Dataset -->
+  <script src="assets/particles-data.js"></script>
+  <!-- Live 60 FPS Biometric Visual Map Engine -->
+  <script src="visual-map.js"></script>
+</body>
+</html>
