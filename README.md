@@ -3,9 +3,9 @@
 <!-- BANNER - terminal profile.sh --live (Click to launch live 60 FPS interactive scanner) -->
 <a href="https://sahilbelchada.dev/visual-map.html" title="Click to launch live 60 FPS Biometric Visual Map Scanner">
   <picture>
-    <source media="(prefers-color-scheme: dark)"  srcset="assets/banner-dark.svg?v=2">
-    <source media="(prefers-color-scheme: light)" srcset="assets/banner-light.svg?v=2">
-    <img src="assets/banner-dark.svg?v=2" width="100%" alt="profile.sh --live">
+    <source media="(prefers-color-scheme: dark)"  srcset="assets/banner-dark.svg?v=3">
+    <source media="(prefers-color-scheme: light)" srcset="assets/banner-light.svg?v=3">
+    <img src="assets/banner-dark.svg?v=3" width="100%" alt="profile.sh --live">
   </picture>
 </a>
 
