@@ -177,47 +177,49 @@ def segment_subject(rgb_im: Image.Image) -> np.ndarray:
 
 
 def portrait_points(theme: str, rng: np.random.Generator) -> np.ndarray:
-    """Return sampled x/y banner coordinates from a 300x340 dither grid."""
+    """Return sampled x/y banner coordinates from a 300x340 dither grid with razor-sharp facial clarity."""
     source = Image.open(SOURCE).convert("RGB")
     w, h = source.size
-    crop_w = 700
+    crop_w = 620
     crop_h = int(crop_w * 340 / 300)
     left = (w - crop_w) // 2
-    top = 70
+    top = 45
     crop = source.crop((left, top, left + crop_w, top + crop_h)).resize((300, 340), Image.Resampling.LANCZOS)
 
     subject_mask = segment_subject(crop)
-    alpha = subject_mask.astype(np.float32)
 
     if theme == "dark":
-        lum = np.asarray(ImageOps.grayscale(crop), dtype=np.float32)
-        prepared = Image.fromarray(np.uint8(np.clip(lum * alpha, 0, 255)), "L")
-        mask = Image.fromarray(np.uint8((alpha > 0.08) * 255), "L")
-        prepared = ImageOps.equalize(prepared, mask=mask)
-        select_lit = True
+        gray_im = ImageOps.grayscale(crop)
+        gray_float = np.asarray(gray_im, dtype=np.float32) / 255.0
+        # Gamma adjustment: 0.75 lifts skin midtones into bright dither dots while dark eyes, pupils, eyebrows, beard remain cleanly dark
+        adjusted = np.power(gray_float, 0.75) * 255.0
+        adj_im = Image.fromarray(np.uint8(np.clip(adjusted, 0, 255)), "L")
+        
+        # Unsharp mask for crisp eye, pupil, and contour definition
+        sharp = adj_im.filter(ImageFilter.UnsharpMask(radius=2.8, percent=240, threshold=1))
+        
+        # Contrast punch for 1-bit definition
+        prepared = ImageEnhance.Contrast(sharp).enhance(1.6)
+        bits = floyd_steinberg(np.asarray(prepared))
+        active = bits & subject_mask
     else:
         # Light mode: subject on white background
         white_bg = Image.new("RGB", crop.size, (255, 255, 255))
         crop_rgba = crop.convert("RGBA")
         crop_rgba.putalpha(Image.fromarray((subject_mask * 255).astype(np.uint8)))
         white_bg.paste(crop_rgba, (0, 0), crop_rgba)
-        prepared = ImageOps.grayscale(white_bg)
-        prepared = ImageOps.autocontrast(prepared, cutoff=1)
-        select_lit = False
-
-    prepared = ImageEnhance.Contrast(prepared).enhance(1.35)
-    prepared = prepared.filter(ImageFilter.UnsharpMask(radius=2, percent=175, threshold=1))
-    bits = floyd_steinberg(np.asarray(prepared))
-    active = bits if select_lit else ~bits
-    active &= subject_mask
+        gray_light = ImageOps.grayscale(white_bg)
+        gray_light = gray_light.filter(ImageFilter.UnsharpMask(radius=2.5, percent=220, threshold=1))
+        prepared = ImageEnhance.Contrast(gray_light).enhance(1.4)
+        
+        bits = floyd_steinberg(np.asarray(prepared))
+        active = (~bits) & subject_mask
 
     ys, xs = np.where(active)
     if len(xs) == 0:
         return np.zeros((0, 2), dtype=np.float32)
     # The VISUAL.MAP inner window in 1180x610 banner is offset at x=74, y=154
     points = np.column_stack((74 + xs, 154 + ys)).astype(np.float32)
-    if len(points) > 18000:
-        points = points[rng.choice(len(points), 18000, replace=False)]
     return points
 
 
@@ -484,10 +486,11 @@ def main() -> None:
             np.save(DATA / f"{name}-{theme}.npy", points)
         svg = render_svg(theme, portraits[theme], sampled, rng)
         
-        # Save both versioned and standard names for GitHub compatibility
+        # Save versioned and standard names for GitHub compatibility
         output = ASSETS / f"banner-{theme}.svg"
         output.write_text(svg, encoding="utf-8")
         (ASSETS / f"banner-{theme}.v9.svg").write_text(svg, encoding="utf-8")
+        (ASSETS / f"banner-{theme}.v10.svg").write_text(svg, encoding="utf-8")
         
         byte_size = output.stat().st_size
         print(
